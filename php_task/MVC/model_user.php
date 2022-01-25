@@ -2,7 +2,7 @@
     try {
         $req = $bdd->prepare(
             "INSERT INTO 
-                user 
+                users 
             SET 
                 name_user = :name_user,
                 first_name_user = :first_name_user,
@@ -22,7 +22,7 @@
                 'SELECT
                     *
                 FROM 
-                    user 
+                    users 
                 WHERE 
                     name_user = :name_user'
             );
@@ -44,7 +44,7 @@
             echo "<p>Erreur lors de l'enregistrement</p>";
         }
         //je vais aller récupérer l'id du nouvel enregistrement
-        $getUserId = $bdd->prepare('SELECT * FROM user WHERE name_user = :name_user');
+        $getUserId = $bdd->prepare('SELECT * FROM users WHERE name_user = :name_user');
         $getUserId->execute(array(':name_user' => $name_user));
         //je crée une variable
         $userId;
@@ -52,7 +52,7 @@
             // je passe l'id à ma variable
             $userId = $oneUser['id_user'];
         }
-        $reqAll = $bdd->prepare('SELECT * FROM user');
+        $reqAll = $bdd->prepare('SELECT * FROM users');
         $reqAll->execute();
         while($allUsers = $reqAll->fetch()){
             // j'affiche seulement si l'id qui vient d'être créer ne correspond pas aux données reçues

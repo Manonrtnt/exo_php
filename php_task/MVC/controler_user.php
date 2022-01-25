@@ -11,6 +11,10 @@
         $login_user = $_POST['login_user'];
         $mdp_user = $_POST['mdp_user'];
 
-        include('model_user.php');
+        if($name_user !=""){
+            include('model_user.php');            
+        } else {
+            echo "<p>Veuillez renseigner tous les champs</p>";
+        }
     }
 ?>

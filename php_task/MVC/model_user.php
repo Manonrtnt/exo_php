@@ -68,4 +68,25 @@
     } catch(Exception $e) {
         die('Erreur : ' .$e->getMessage());
     }
+
+// CLASS 
+    class Users{
+        private $id_user;
+        private $name_user;
+        private $first_name_user;
+        private $login_user;
+        private $mdp_user;
+    }
+    class Task{
+        private $id_task;
+        private $name_task;
+        private $date_task;
+        // id_user
+        // id_cat
+    }
+
+    class Category{
+        private $id_cat;
+        private $name_cat;
+    }
 ?>

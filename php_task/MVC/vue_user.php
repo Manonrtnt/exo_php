@@ -11,18 +11,18 @@
     <form action="" method="POST">
         <p>Créer un utilisateur</p>
         <p>Nom </p>
-        <input type="text" name="name_user">
+        <input type="text" name="name_user" required>
         <br>
         <p>Prénom</p>
-        <input type="text" name="first_name_user">
+        <input type="text" name="first_name_user" required>
         <br>
         <p>Login</p>
-        <input type="text" name="login_user">
+        <input type="text" name="login_user" required>
         <br>
         <p>Mot de passe</p>
-        <input type="text" name="mdp_user">
+        <input type="text" name="mdp_user" required>
         <br>
-        <input type="submit" value="Créer">
+        <input type="submit" value="Créer" required>
     </form>
 </body>
 </html>

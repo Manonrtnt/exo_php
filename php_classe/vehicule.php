@@ -13,20 +13,23 @@
 
         public function detect(){
             if ($this->nbrRoue ==2){
-                echo "<p>Le véhicule ".$this->nomVehicule." est une moto</p>";
+                return "<p>Le véhicule ".$this->nomVehicule." est une moto</p>";
             } else {
-                echo "<p>Le véhicule ".$this->nomVehicule." est une voiture</p>";
+                return "<p>Le véhicule ".$this->nomVehicule." est une voiture</p>";
             }
         }
         public function boost(){
             return $this->vitesse +=50;
         }
-        public function rapido(){
-            if ($vehicule1->vitesse >$vehicule2->vitesse){
-                return $vehicule1->nomVehicule;
-            } else {
-                return $vehicule2->nomVehicule;
-            }
+        public function faster($toCompare){
+        if ($this->vitesse > $toCompare->vitesse){
+            return "<p>Le véhicule le plus rapide est : ".$this->nomVehicule;
+        } else if ($toCompare->vitesse > $this->vitesse){
+            return "<p>Le véhicule le plus rapide est : ".$toCompare->nomVehicule;
+        } else {
+            return "Les véhicules".$this->nomVehicule." et ".$toCompare->nomVehicule." ont la même vitesse max";
         }
     }
+    }
+
 ?>

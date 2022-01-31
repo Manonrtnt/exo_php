@@ -23,6 +23,7 @@
     // Méthode detect()
     $voiture->detect();
     $moto->detect();
+    echo $voiture->detect();
 
     // Methode boost
     $voiture->boost();
@@ -30,5 +31,6 @@
     echo "<p>La vitesse max de la voiture ".$voiture->nomVehicule." est maintenant de ".$voiture->vitesse." km/h";
 
     // Methode rapido
-    rapido($voiture, $moto);
+    $res = $voiture->faster($moto);
+    echo $res;
 ?>

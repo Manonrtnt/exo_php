@@ -1,7 +1,7 @@
 <?php
     class UserBean{
         // deux attribut pour se connecter à bdd
-        public $connect; // établir sa connection à lui (cf fonction getConnection)
+        public $connect; // (cf fonction getConnection)
         // et en private le nom de sa table.
         private $table ="userbean";
 
@@ -69,7 +69,7 @@
         // READ : récupérer la liste de tous les utilisateurs
         public function getUsers(){
             // stockage de la requête dans une varaible
-            $myQuery = 'SELECT * FROM' .$this->table.'';
+            $myQuery = 'SELECT * FROM ' .$this->table.'';
             // stockage dans variable de la préparation de la requête (requête préparé) = éviter injection stmt:état
             $stmt = $this->connect->prepare($myQuery);
             // exécution de la requête après sa préparation
@@ -82,7 +82,7 @@
         //(peut-être modifié avec recherche par id ou mail, etc)
         public function getSingleUser(){
             // stockage de la requête dans une varaible
-            $myQuery = 'SELECT * FROM' .$this->table.'WHERE pseudo='.$this->pseudo.'';
+            $myQuery = 'SELECT * FROM ' .$this->table.' WHERE pseudo= '.$this->pseudo.'';
             // stockage dans variable de la préparation de la requête (requête préparé) = éviter injection stmt:état
             $stmt = $this->connect->prepare($myQuery);
             // exécution de la requête après sa préparation
@@ -95,26 +95,27 @@
         public function createUser(){
             // dans cette requête j'ai crée les paramètres :pseudo, :password et :mail 
             //auxquels j'attribuerais des valeurs lors du bind des paramètres
-            $myQuery = 'INSERT INTO'.$this->table.
-                        'SET 
+            $myQuery = 'INSERT INTO '.$this->table.
+                        ' SET 
                             pseudo = :pseudo, 
                             password = :password,
                             mail = :mail';
             $stmt = $this->connect->prepare($myQuery);
-            
+            //var_dump($stmt);
             // bind/lier les paramètres
             $stmt->bindParam(':pseudo', $this->pseudo); 
             $stmt->bindParam(':password', $this->password);
             $stmt->bindParam(':mail', $this->mail);
 
             // retourne true ou false si exécuté
+            //var_dump($stmt);
             return $stmt->execute();
         }
 
         // UPDATE : mettre à jour un utilisateur (pseudo, mail ou password) // après le setAttribut.  
         public function updateUser(){
-            $myQuery = 'UPDATE'.$this->table.
-            'SET 
+            $myQuery = 'UPDATE '.$this->table.
+            ' SET 
                 pseudo = :pseudo, 
                 password = :password,
                 mail = :mail
@@ -142,7 +143,7 @@
 
         //DELETE : suppresion utilisateur (selon pseudo, id ou mail). 
         public function deleteUser(){
-            $myQuery = 'DELETE FROM' .$this->table.'WHERE pseudo='.$this->pseudo.'';
+            $myQuery = 'DELETE FROM ' .$this->table.' WHERE pseudo= '.$this->pseudo.'';
             // stockage dans variable de la préparation de la requête (requête préparé) = éviter injection stmt:état
             $stmt = $this->connect->prepare($myQuery);
             //bind

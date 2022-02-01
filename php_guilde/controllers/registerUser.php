@@ -7,7 +7,7 @@
     // include_once pour ne l'appeler d'une fois. 
     include_once ("../models/userbean.php");
     include ("../utils/db_config.php");
-    include ("../views/register.php");
+    // include ("../views/register.php");
 
     // Création de variables qui me serviront à retourner du JSON -> Traiter dans JS
     $success = 0;
@@ -54,23 +54,43 @@
                 //Pour l'affectation du mot de passe je vais également utiliser la fonction de hash de BCRYPT
                 $newUser->setPassword(password_hash($verifPassword, PASSWORD_BCRYPT));
                 $newUser->setMail($verifMail);
+                // Je récupère les valeurs par défaut des attribut pour les attribuer à cet utilisateur (modifier attributs avec valeur par défaut un get dans un set)
+                $newUser->setIdRoleSite($newUser->getIdRoleSite());
+                $newUser->setIdRoleGame($newUser->getIdRoleGame());
 
-                // Il ne reste plus qu'à appeler la fonction createUser incluse dans la classe UserBean
-                //var_dump($newUser);
-                if ($newUser->createUser()){
-                    // Ma variale $success passe à 1    
-                    $success = 1;
-                    // Je passe un message de réussite
-                    $msg = "Utilisateur créé avec succès";
-                    // retourne (pour le moment) seulement son pseudo en donnée
-                    $data['pseudo']=$verifPseudo;
-                    //var_dump($data);            
-                } else {
-                    $msg = "Erreur lors de l'enregistrement";
+                // avant de pourvoir procéder à l'insertion en base de données
+                // je vais vérifier que le pseudo ou le mail n'existe pas déjà 
+                // dans ma base de données
+                // je stocke dans une variable le retour de la fonction qui se trouve dans ma classe User
+                $retourVerifPseudo = $newUser->verifPseudo();
+                $retourVerifMail = $newUser->verifMail();
+                // Stockage dans une variable du résultat du décompte du nbr de ligne (row)
+                // du retour grâce à la fonction PHP rowCount()
+                $nbrRowPseudo = $retourVerifPseudo->rowCount();
+                $nbrRowMail = $retourVerifMail->rowCount();
+                if ($nbrRowPseudo>0){
+                    // Pas opi faire pseudo puis mail. 
+                    $msg="Pseudo déjà existant, veuillez renouveler votre demande";
+                } else if ($nbrRowMail>0){
+                    $msg="Email déjà existant, veuillez renouveler votre demande";
+                } else
+                    // Il ne reste plus qu'à appeler la fonction createUser incluse dans la classe UserBean
+                    //var_dump($newUser);
+                    if ($newUser->createUser()) {
+                        // Ma variale $success passe à 1    
+                        $success = 1;
+                        // Je passe un message de réussite
+                        $msg = "Utilisateur créé avec succès";
+                        // retourne (pour le moment) seulement son pseudo en donnée
+                        $data['pseudo'] = $verifPseudo;
+                        //var_dump($data);            
+                    } else {
+                        $msg = "Erreur lors de l'enregistrement";
+                    }
                 }
+
             }
-        }
-    } else {
+        } else {
         $msg = 'Veuillez renseigner tous les champs';
     }
 

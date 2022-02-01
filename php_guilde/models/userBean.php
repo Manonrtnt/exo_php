@@ -10,8 +10,9 @@
         private $pseudo;
         private $password;
         private $mail;
-        private $idRoleGame;
-        private $idRoleSite;
+        // Ajouter lien id de plus bas niveau // Admin gèrera l'upgrade plus tard
+        private $idRoleGame=4;
+        private $idRoleSite=4;
 
         // constructor qui va établir la connection à la bdd
         public function __construct(){
@@ -68,8 +69,19 @@
         // Création des méthodes de bases CRUD
         // READ : récupérer la liste de tous les utilisateurs
         public function getUsers(){
-            // stockage de la requête dans une varaible
-            $myQuery = 'SELECT * FROM ' .$this->table.'';
+            // stockage de la requête dans une varaible + jointure autre table pour récupérer id_role
+            $myQuery = 'SELECT 
+                            * 
+                        FROM 
+                            ' .$this->table.' as u
+                        JOIN
+                            rolesitebean as rs
+                        JOIN
+                            rolegamebean as rg
+                        WHERE
+                            u.idRoleSite= rs.idRoleSite
+                        AND
+                            u.idRoleGame=rg.idRoleGame';
             // stockage dans variable de la préparation de la requête (requête préparé) = éviter injection stmt:état
             $stmt = $this->connect->prepare($myQuery);
             // exécution de la requête après sa préparation
@@ -82,7 +94,20 @@
         //(peut-être modifié avec recherche par id ou mail, etc)
         public function getSingleUser(){
             // stockage de la requête dans une varaible
-            $myQuery = 'SELECT * FROM ' .$this->table.' WHERE pseudo= '.$this->pseudo.'';
+            $myQuery = 'SELECT 
+                            * 
+                        FROM 
+                            ' .$this->table.' as u
+                        JOIN
+                            rolesitebean as rs
+                        JOIN
+                            rolegamebean as rg
+                        WHERE
+                            u.idRoleSite= rs.idRoleSite
+                        AND
+                            u.idRoleGame=rg.idRoleGame
+                        AND 
+                            pseudo= '.$this->pseudo.'';
             // stockage dans variable de la préparation de la requête (requête préparé) = éviter injection stmt:état
             $stmt = $this->connect->prepare($myQuery);
             // exécution de la requête après sa préparation
@@ -99,13 +124,17 @@
                         ' SET 
                             pseudo = :pseudo, 
                             password = :password,
-                            mail = :mail';
+                            mail = :mail,
+                            idRoleSite = :idRoleSite, 
+                            idRoleGame = :idRoleGame';
             $stmt = $this->connect->prepare($myQuery);
             //var_dump($stmt);
             // bind/lier les paramètres
             $stmt->bindParam(':pseudo', $this->pseudo); 
             $stmt->bindParam(':password', $this->password);
             $stmt->bindParam(':mail', $this->mail);
+            $stmt->bindParam(':idRoleSite', $this->idRoleSite);
+            $stmt->bindParam(':idRoleGame', $this->idRoleGame);
 
             // retourne true ou false si exécuté
             //var_dump($stmt);
@@ -118,8 +147,10 @@
             ' SET 
                 pseudo = :pseudo, 
                 password = :password,
-                mail = :mail
-                WHERE
+                mail = :mail,
+                idRoleSite = :idRoleSite,
+                idRoleGame = :idRoleGame 
+                WHERE 
                     pseudo = :pseudo2';
             
             $stmt = $this->connect->prepare($myQuery);
@@ -129,6 +160,8 @@
             $stmt->bindParam(':password', $this->password);
             $stmt->bindParam(':mail', $this->mail);
             $stmt->bindParam(':pseudo2', $this->pseudo); 
+            $stmt->bindParam(':idRoleSite', $this->idRoleSite);
+            $stmt->bindParam(':idRoleGame', $this->idRoleGame);
 
             // if ($stmt->execute()){
             // je retourne true si mise à jour ok
@@ -150,6 +183,39 @@
             $stmt->bindParam(':pseudo',$this->pseudo);
             // je retourne le résultat executé
             return $stmt->execute();
+        }
+
+        // Vérification pseudo ou email unique
+        public function verifPseudo(){
+            $myQuery = 'SELECT
+                            *
+                        FROM 
+                            '.$this->table.'
+                        WHERE
+                            pseudo = :pseudo';
+
+            $stmt = $this->connect->prepare($myQuery);
+            //bind
+            $stmt->bindParam(':pseudo',$this->pseudo);
+            // je retourne le résultat executé
+            $stmt->execute();
+            return $stmt;
+        }
+
+        // Vérification pseudo ou email unique
+        public function verifMail(){
+            $myQuery = 'SELECT
+                            *
+                        FROM 
+                            '.$this->table.'
+                        WHERE
+                            mail = :mail';
+            $stmt = $this->connect->prepare($myQuery);
+            //bind
+            $stmt->bindParam(':mail',$this->mail);
+            // je retourne le résultat executé
+            $stmt->execute();
+            return $stmt;
         }
     }
 ?>

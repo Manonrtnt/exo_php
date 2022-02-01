@@ -4,7 +4,7 @@ document.getElementById('registerForm').addEventListener("submit", function(even
     event.preventDefault(); // prevenir des erreur de navigateur
     
     // Récupération des données du formulaire dans une variable (le forumaulaire est ici représenté avec this)
-    let data = new FormDataEvent(this); // classe native à js pour gérer les formulaires et créer nouvel objet avec input formulaire écouté.
+    let data = new FormData(this); // classe native à js pour gérer les formulaires et créer nouvel objet avec input formulaire écouté.
 
     // Je crée une variable qui sera une instance de XMLHTTPREQUEST = interaction with server
     let xhr = new XMLHttpRequest();
@@ -30,10 +30,21 @@ document.getElementById('registerForm').addEventListener("submit", function(even
                 localStorage.setItem('myUser',toJson); // je nomme l'item + ce que je veux mettre dedans. 
                 // Afficher alterne utilisateur pour confirmer enregistrement. 
                 alert(res.msg);
+            } else {
+                alert(res.msg);
             }
         // Toutes les 4 réponses ok mais code de statut différents (exemple 400 = erreur)
         } else if (this.readySate == 4){
             alert("Une erreur est survenu");
         }
     }
+    // je demande à ma variable xhr d'établir une connection en POST (vers le lien que je lui donne)
+    // le true signalera que notre reuqête est en asynchrone
+    xhr.open("POST", "http://localhost/exo_php/php_guilde/controllers/registerUser.php", true);
+    // Demander à la variable xhr d'envoyer le tout au controlleur en lui passant data en paramètre
+    // data = toutes les données du formulaire
+    xhr.send(data);
+
+    // par défaut je retourne un false pour ne pas bloquer le script
+    return false;
 })

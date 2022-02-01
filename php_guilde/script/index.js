@@ -1,3 +1,4 @@
+// Traiter donné si connecté. Si pas inscrit check register.html et formRegister.js
 // Création variable 'myUser' qui va tenter de récupérer un item 'myUser' dans le localStorage
 // Si elle ne récupère pas = utilisateur pas connecté. 
 let myUser = JSON.parse(localStorage.getItem('myUser'));
